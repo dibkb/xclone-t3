@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-const post = [
+const posts = [
   {
     author: "",
     post: "🚀",
@@ -17,12 +17,17 @@ const post = [
 ];
 export const postRouter = createTRPCRouter({
   create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(z.object({ post: z.string().min(1) }))
     .mutation(async ({ input }) => {
       // simulate a slow db call
-      return post;
+      posts.push({
+        author: "",
+        post: input.post,
+      });
+
+      return posts;
     }),
   getAll: publicProcedure.query(() => {
-    return post;
+    return posts;
   }),
 });
